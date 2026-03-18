@@ -10,6 +10,7 @@ from gspread_formatting import (
     Color,
     TextFormat,
     format_cell_range,
+    format_cell_ranges,
     set_column_width,
 )
 
@@ -135,19 +136,19 @@ def format_output_sheet(worksheet) -> None:
 
     # Set column widths
     col_widths = {
-        0: 180,   # Name
-        1: 140,   # Property Value
-        2: 140,   # Mortgage Balance
-        3: 130,   # Equity
-        4: 90,    # Equity %
-        5: 90,    # LTV %
-        6: 150,   # Borrowing Capacity
-        7: 100,   # PMI Eligible
-        8: 140,   # Position
-        9: 500,   # Personalized Message
+        "A": 180,   # Name
+        "B": 140,   # Property Value
+        "C": 140,   # Mortgage Balance
+        "D": 130,   # Equity
+        "E": 90,    # Equity %
+        "F": 90,    # LTV %
+        "G": 150,   # Borrowing Capacity
+        "H": 100,   # PMI Eligible
+        "I": 140,   # Position
+        "J": 500,   # Personalized Message
     }
-    for col_idx, width in col_widths.items():
-        set_column_width(worksheet, col_idx + 1, width)
+    for col_label, width in col_widths.items():
+        set_column_width(worksheet, col_label, width)
 
     # Color code rows based on Position column (column I)
     try:
@@ -178,7 +179,6 @@ def format_output_sheet(worksheet) -> None:
         formats.append((cell_range, CellFormat(backgroundColor=bg)))
 
     if formats:
-        from gspread_formatting import format_cell_ranges
         format_cell_ranges(worksheet, formats)
 
     logger.info("Applied formatting to %d data rows", len(all_values) - 1)

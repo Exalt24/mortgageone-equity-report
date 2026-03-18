@@ -237,10 +237,11 @@ def main() -> None:
     if not args.dry_run and not args.csv:
         write_results(client, sheet_id, output_sheet, results)
         logger.info("Results written to '%s'", output_sheet)
-    elif args.dry_run:
-        # Print results to console in dry-run mode
+    else:
+        # Print results to console in dry-run or CSV mode
         for r in results:
             print(f"{r.homeowner.name}: {r.message}")
+            print()
 
 
 if __name__ == "__main__":

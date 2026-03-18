@@ -245,7 +245,7 @@ def _build_batch_body(
             "json_schema": {
                 "name": "EquityMessage",
                 "strict": True,
-                "schema": EquityMessage.model_json_schema(),
+                "schema": {**EquityMessage.model_json_schema(), "additionalProperties": False},
             },
         },
     }

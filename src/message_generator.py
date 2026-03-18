@@ -5,8 +5,7 @@ import logging
 import time
 from pathlib import Path
 
-from openai import OpenAI
-from openai.lib._pydantic import to_strict_json_schema
+from openai import OpenAI, APIConnectionError, APITimeoutError, RateLimitError
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -163,7 +162,7 @@ def build_user_prompt(
 
 
 @retry(
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception_type((RateLimitError, APIConnectionError, APITimeoutError)),
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=30),
     before_sleep=lambda retry_state: logger.warning(
@@ -246,7 +245,7 @@ def _build_batch_body(
             "json_schema": {
                 "name": "EquityMessage",
                 "strict": True,
-                "schema": to_strict_json_schema(EquityMessage),
+                "schema": {**EquityMessage.model_json_schema(), "additionalProperties": False},
             },
         },
     }

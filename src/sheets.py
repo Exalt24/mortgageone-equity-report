@@ -92,7 +92,8 @@ def write_results(
 
     try:
         worksheet = spreadsheet.worksheet(sheet_name)
-        logger.info("Found existing worksheet '%s'", sheet_name)
+        worksheet.clear()
+        logger.info("Found existing worksheet '%s', cleared old data", sheet_name)
     except gspread.exceptions.WorksheetNotFound:
         worksheet = spreadsheet.add_worksheet(title=sheet_name, rows=len(results) + 1, cols=len(HEADERS))
         logger.info("Created new worksheet '%s'", sheet_name)
@@ -101,12 +102,12 @@ def write_results(
     for r in results:
         rows.append([
             r.homeowner.name,
-            f"${r.homeowner.property_value:,.2f}",
-            f"${r.homeowner.mortgage_balance:,.2f}",
-            f"${r.equity.equity:,.2f}",
+            f"${r.homeowner.property_value:,.0f}",
+            f"${r.homeowner.mortgage_balance:,.0f}",
+            f"${r.equity.equity:,.0f}",
             f"{r.equity.equity_percentage:.1f}%",
             f"{r.equity.ltv:.1f}%",
-            f"${r.equity.borrowing_capacity:,.2f}",
+            f"${r.equity.borrowing_capacity:,.0f}",
             "Yes" if r.equity.can_remove_pmi else "No",
             r.equity.position,
             r.message,

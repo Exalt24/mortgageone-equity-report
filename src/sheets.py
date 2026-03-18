@@ -113,7 +113,7 @@ def write_results(
         ])
 
     try:
-        worksheet.update("A1", [HEADERS] + rows)
+        worksheet.update(values=[HEADERS] + rows, range_name="A1")
         logger.info("Wrote %d result rows to '%s'", len(rows), sheet_name)
     except Exception as e:
         logger.error("Failed to write results to '%s': %s", sheet_name, e)

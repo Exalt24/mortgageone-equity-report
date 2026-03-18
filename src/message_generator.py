@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 
 from openai import OpenAI
+from openai.lib._pydantic import to_strict_json_schema
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -245,7 +246,7 @@ def _build_batch_body(
             "json_schema": {
                 "name": "EquityMessage",
                 "strict": True,
-                "schema": {**EquityMessage.model_json_schema(), "additionalProperties": False},
+                "schema": to_strict_json_schema(EquityMessage),
             },
         },
     }

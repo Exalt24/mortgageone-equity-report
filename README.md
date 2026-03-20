@@ -11,6 +11,7 @@ Automated pipeline that reads homeowner data from Google Sheets, calculates equi
 - CLI with `--dry-run`, `--estimate-only`, `--batch`, and `--csv` modes
 - Batch API mode for 50% cost savings at scale
 - Progress bar for visual feedback during processing
+- Auto-detects input format (standard columns or raw loan export with Borrower Name, Loan Amount, Down Payment)
 - Handles edge cases: missing data, negative equity, special characters, empty rows
 
 ## Quick Start
@@ -79,13 +80,21 @@ This tool uses a Google Cloud service account to read and write spreadsheet data
 6. Copy the service account email (it looks like `name@project.iam.gserviceaccount.com`)
 7. Open your Google Sheet, click **Share**, paste the service account email, and give it **Editor** access
 
-Your input sheet should have the following columns:
+The tool auto-detects two input formats:
+
+**Standard format:**
 
 | Name | Property Value | Mortgage Balance |
 |------|---------------|-----------------|
 | Jane Smith | 450000 | 320000 |
-| John Doe | 275000 | 260000 |
-| Sarah Johnson | 600000 | 150000 |
+
+**Loan export format** (paste directly from your loan system):
+
+| Borrower Name | Total Loan Amount | Down Payment Amount | ... |
+|--------------|------------------|--------------------| --- |
+| Smith, Jane | 320000 | 80000 | ... |
+
+When loan export format is detected, the tool automatically flips "Last, First" names, calculates property value from loan amount plus down payment, and processes everything. No manual conversion needed.
 
 The tool reads from the input sheet, runs calculations, and writes results to a separate output worksheet.
 

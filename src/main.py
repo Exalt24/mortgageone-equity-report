@@ -58,11 +58,52 @@ def read_from_csv(file_path: str) -> list[dict]:
     return records
 
 
+def _detect_and_normalize(record: dict) -> dict:
+    """Auto-detect column format and normalize to Name/Property Value/Mortgage Balance.
+
+    Supports two formats:
+    1. Standard: Name, Property Value, Mortgage Balance
+    2. Loan export: Borrower Name, Total Loan Amount, Down Payment Amount
+       (Property Value = Loan Amount + Down Payment, Mortgage Balance = Loan Amount)
+    """
+    if "Name" in record:
+        return record
+
+    if "Borrower Name" in record:
+        name = record.get("Borrower Name", "")
+        loan_amount = record.get("Total Loan Amount", 0)
+        down_payment = record.get("Down Payment Amount", 0)
+
+        # Flip "Last, First" to "First Last"
+        if "," in str(name):
+            parts = str(name).split(",", 1)
+            name = f"{parts[1].strip()} {parts[0].strip()}"
+
+        try:
+            loan_amount = float(str(loan_amount).replace(",", "")) if loan_amount else 0
+            down_payment = float(str(down_payment).replace(",", "")) if down_payment else 0
+        except (ValueError, TypeError):
+            return {"Name": name, "Property Value": "", "Mortgage Balance": ""}
+
+        return {
+            "Name": name,
+            "Property Value": loan_amount + down_payment,
+            "Mortgage Balance": loan_amount,
+        }
+
+    return record
+
+
 def validate_records(records: list[dict]) -> list[HomeownerData]:
     """Validate raw records and return clean HomeownerData objects."""
     logger = logging.getLogger(__name__)
     valid = []
+
+    if records and "Borrower Name" in records[0]:
+        logger.info("Detected loan export format, converting automatically")
+
     for i, record in enumerate(records):
+        record = _detect_and_normalize(record)
         name = record.get("Name", "")
         prop_val = record.get("Property Value", "")
         mort_bal = record.get("Mortgage Balance", "")

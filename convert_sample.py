@@ -1,4 +1,4 @@
-"""Convert Chris's loan data (Sample79.xlsx) into our expected input format.
+"""Convert a local loan export workbook into a sample CSV for testing.
 
 For purchases: Property Value = Total Loan Amount + Down Payment Amount
 For refinances: Property Value is unknown from loan data alone (down payment = $0).
@@ -6,7 +6,7 @@ For refinances: Property Value is unknown from loan data alone (down payment = $
 
 Usage:
     python convert_sample.py
-    # Creates chris_homeowners.csv ready for --csv or Google Sheets upload
+    # Creates loan_export_sample.csv ready for --csv or Google Sheets upload
 """
 
 import csv
@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 INPUT_FILE = Path(__file__).parent.parent / "Sample79.xlsx"
-OUTPUT_FILE = Path(__file__).parent / "chris_homeowners.csv"
+OUTPUT_FILE = Path(__file__).parent / "loan_export_sample.csv"
 
 
 def convert():

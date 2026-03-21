@@ -35,6 +35,11 @@ Automated pipeline that reads homeowner data from Google Sheets, calculates equi
    ```
    Open `.env` and fill in your `SPREADSHEET_ID` and `OPENAI_API_KEY`.
 
+   On Windows PowerShell, use:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
 5. **Run the report**
    ```bash
    python -m src.main

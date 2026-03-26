@@ -149,7 +149,7 @@ Costs using GPT-4o-mini (as of March 2026):
 
 Prompt caching kicks in automatically for repeated system prompts longer than 1,024 tokens. Batch API processes requests asynchronously within 24 hours in exchange for the 50% discount.
 
-**Compared to Homebot:** Homebot pricing starts at $25/month for 500 contacts and scales to $115+/month for larger lists, plus a $50 setup fee. This tool costs approximately $0.01 to $0.05 per run depending on list size and mode.
+**Compared to Homebot:** Homebot pricing starts at $125/month (Starter, 200 clients) and goes up to $300/month (Unlimited), plus a $100 setup fee. This tool costs approximately $0.01 to $0.05 per run depending on list size and mode.
 
 ## Compliance Notes
 
